@@ -13,7 +13,7 @@ function Home() {
         <p className="text-sm font-bold text-red-400">AI can make mistakes</p>
       </div>
 
-      <Button variant="default" className="mt-4">Get Started</Button>
+      <Button onClick={() => window.location.href = "/brain-map"}  variant="default" className="mt-4">Get Started</Button>
     </div>  
   );
 }
