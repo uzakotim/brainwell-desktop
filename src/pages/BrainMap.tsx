@@ -40,6 +40,7 @@ function BrainMap() {
         </div>
 
         <Button onClick={handleRandomize} variant="default" className="mt-4">Randomize questions</Button>
+        <Button onClick={() => navigate("/stats")} variant="default" className="mt-4">Statistics</Button>
       </div>  
     </Layout>
   );

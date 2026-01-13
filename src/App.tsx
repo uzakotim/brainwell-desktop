@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import BrainMap from "./pages/BrainMap";
 import BrainRegion from "./pages/BrainRegion";
 import "./App.css";
+import Stats from "./pages/Stats";
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/brain-map" element={<BrainMap />} />
       <Route path="/brain-region/:region" element={<BrainRegion />} />
+      <Route path="/stats" element={<Stats/>}/>
     </Routes>
   );
 }
