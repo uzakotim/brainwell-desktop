@@ -3,62 +3,65 @@ export const questions = {
     "PFC": {
       "description": "Assesses logic, planning, decision-making, and impulse control.",
       "questions": [
-        "Do you often struggle to plan your day or organize tasks?",
-        "Do you find it hard to resist impulses or temptations?",
-        "Do you frequently make decisions without thinking through the consequences?",
-        "Can you easily switch between tasks without losing focus?",
-        "Do you find it difficult to prioritize tasks when under pressure?",
-        "Do you often forget steps in multi-step problem-solving?",
-        "Do you analyze situations before acting, or act on instinct?",
-        "Do you find abstract reasoning (e.g., puzzles, patterns) challenging?",
-        "Can you delay immediate rewards for long-term benefits?",
-        "Do you frequently overthink or ruminate about decisions?"
+        "Do you struggle to plan your day or organize tasks effectively?",
+        "Do you often act on impulse rather than thinking things through?",
+        "Do you make decisions quickly and later regret them?",
+        "Do you find it hard to switch between tasks without losing focus?",
+        "Do you struggle to prioritize tasks when under pressure?",
+        "Do you forget steps in multi-step tasks or problem-solving?",
+        "Do you act before analyzing situations properly?",
+        "Do you find abstract thinking (patterns, strategy, puzzles) difficult?",
+        "Do you struggle to delay gratification for long-term benefits?",
+        "Do you frequently overthink decisions to the point of inaction?"
       ]
     },
+
     "Amygdala": {
       "description": "Assesses emotional reactivity, fear response, and threat detection.",
       "questions": [
-        "Do you often feel anxious or tense even in safe situations?",
-        "Do loud noises or sudden events startle you easily?",
-        "Do you have strong emotional reactions to movies, games, or stories?",
-        "Do you find it difficult to calm down after being upset?",
-        "Do you feel threatened even when there’s no immediate danger?",
-        "Do you frequently experience 'fight or flight' reactions?",
-        "Do you avoid situations because they make you anxious?",
-        "Do your emotions sometimes feel uncontrollable?",
-        "Do you remember emotionally charged events more vividly than neutral ones?",
-        "Do you overreact to minor conflicts or criticism?"
+        "Do you feel anxious or tense even when nothing is wrong?",
+        "Do sudden noises or movements startle you excessively?",
+        "Do you experience intense emotional reactions to minor triggers?",
+        "Do you struggle to calm down after becoming upset?",
+        "Do you feel threatened in situations that others consider safe?",
+        "Do you experience frequent fight-or-flight reactions?",
+        "Do you avoid situations mainly due to fear or anxiety?",
+        "Do your emotions often feel overwhelming or uncontrollable?",
+        "Do emotional memories dominate your thoughts more than neutral ones?",
+        "Do you overreact emotionally to minor conflicts or criticism?"
       ]
     },
+
     "ACC": {
       "description": "Assesses conflict monitoring, error detection, and emotional regulation.",
       "questions": [
-        "Do you notice mistakes in your work or daily life quickly?",
-        "Do you feel tension when faced with conflicting choices?",
-        "Do you often worry about potential negative outcomes?",
-        "Do you struggle to adjust your behavior when a plan fails?",
-        "Do you find it difficult to regulate your emotional responses?",
-        "Do you feel restless when things are uncertain?",
-        "Do you catch yourself repeating errors even after knowing better?",
-        "Do you feel uneasy when social interactions are tense?",
-        "Do you notice when others’ behaviors are inconsistent or unfair?",
-        "Do you frequently anticipate problems before they happen?"
+        "Do you often fail to notice your own mistakes?",
+        "Do conflicting choices cause you excessive stress or paralysis?",
+        "Do you constantly anticipate negative outcomes?",
+        "Do you struggle to change your behavior after a plan fails?",
+        "Do you have difficulty regulating emotional reactions?",
+        "Do uncertainty and ambiguity make you unusually uncomfortable?",
+        "Do you repeat the same mistakes despite knowing better?",
+        "Do tense social situations cause strong internal discomfort?",
+        "Do you struggle to recognize unfairness or inconsistency in situations?",
+        "Do you feel mentally strained by having to monitor errors or conflicts?"
       ]
     },
+
     "Hippocampus": {
       "description": "Assesses memory, spatial navigation, and learning ability.",
       "questions": [
-        "Do you often forget recent events or conversations?",
-        "Do you struggle to remember directions or locations?",
-        "Do you find it difficult to recall names or faces?",
-        "Do you have trouble remembering sequences of steps or instructions?",
-        "Do you find learning new skills or information challenging?",
-        "Do you often rely on reminders or notes to avoid forgetting?",
-        "Can you easily recall childhood or past experiences?",
+        "Do you often forget recent conversations or events?",
+        "Do you struggle with directions or navigating familiar places?",
+        "Do you frequently forget names or faces?",
+        "Do you have difficulty remembering sequences or instructions?",
+        "Do you struggle to learn and retain new information?",
+        "Do you rely heavily on reminders to function day to day?",
+        "Do you have difficulty recalling past personal experiences?",
         "Do you struggle to form new long-term memories?",
-        "Do you find it difficult to visualize spatial layouts mentally?",
-        "Do you often confuse similar memories or events?"
+        "Do you find it hard to mentally visualize spaces or layouts?",
+        "Do you confuse similar memories or mix up past events?"
       ]
     }
   }
-}
+};

@@ -27,7 +27,16 @@ function Stats() {
           {Object.entries(regionSums).map(([region, sum]) => (
             <div key={region} className="w-[calc(90vh)]">
               <h2 className="mb-2 font-semibold capitalize">{region}</h2>
-              <Progress value={(sum / 10) * 100} />
+              { (sum/10) * 100 >= 66 ? (
+                 <Progress value={(sum / 10) * 100} barColor="bg-red-400" />
+              ) :
+               (sum/10) * 100 >= 33 ? (
+                 <Progress value={(sum / 10) * 100} barColor="bg-amber-400" />
+               )
+               : (
+                 <Progress value={(sum / 10) * 100} barColor="bg-green-500" />
+               )
+              }
             </div>
           ))}
           </div>
