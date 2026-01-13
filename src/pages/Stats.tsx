@@ -23,13 +23,6 @@ function Stats() {
   return (
     <Layout>
        <div className="max-w-3xl mx-auto px-6 py-12 flex flex-col items-center">
-          
-          <header className="mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold pb-8 tracking-tight bg-clip-text text-primary">
-                Statistics
-            </h1>
-          </header>
-          
           <div className="flex flex-col items-center justify-center space-y-8">
           {Object.entries(regionSums).map(([region, sum]) => (
             <div key={region} className="w-[calc(90vh)]">
