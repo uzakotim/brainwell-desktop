@@ -22,4 +22,6 @@ tauri = { version = "2", features = [] }
 tauri-plugin-opener = "2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
+dotenv = "0.15.0"
+fix-path-env = { git = "https://github.com/tauri-apps/fix-path-env-rs" }
 

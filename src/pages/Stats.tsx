@@ -4,9 +4,14 @@ import Layout from "@/components/Layout";
 import "../App.css";
 import { brainRegionAnswersAtom } from "../store/brainCheckupStore";
 import { Progress } from "@/components/ui/progress"
+import { Button } from "@/components/ui/button";
+import { invoke } from "@tauri-apps/api/core";
+import { useState } from "react";
+
 
 function Stats() {
   const navigate = useNavigate();
+  const [consoleMsg, setConsoleMsg] = useState("");
   const [brainRegionAnswers] = useAtom(brainRegionAnswersAtom);
 
  const regionSums: Record<string, number> = {};
@@ -19,7 +24,20 @@ function Stats() {
   });
 
   console.log("Region sums:", regionSums);
-
+  const saveRecord = async () => {
+    const record = {
+      // current date in format DD-MM-YYYY
+      date: new Date().toLocaleDateString('en-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }),
+      dayTime: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      regionSums,
+    };
+    setConsoleMsg("Saving...");
+    await invoke("insert_record_to_store",{recordJson: JSON.stringify(record)});
+    setConsoleMsg("Record saved!");
+    setTimeout(() => {
+      setConsoleMsg("");
+    }, 3000);
+  }
   return (
     <Layout>
        <div className="max-w-3xl mx-auto px-6 py-12 flex flex-col items-center">
@@ -40,6 +58,8 @@ function Stats() {
             </div>
           ))}
           </div>
+          <Button onClick={saveRecord} variant="default" className="mt-4">Save a record</Button>
+          <p className="mt-4">{consoleMsg}</p>
       </div>
     </Layout>
   );
