@@ -9,6 +9,7 @@ import {
   brainRegionAnswersAtom, 
   getRandomQuestions 
 } from "../store/brainCheckupStore";
+import { Brain } from "lucide-react";
 
 function BrainMap() {
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ function BrainMap() {
               </Button>
             ))}
         </div>
-
+        <Brain className="w-[calc(30vh)] h-[calc(30vh)]"/>
         <Button onClick={handleRandomize} variant="default" className="mt-4">Randomize questions</Button>
         <Button onClick={() => navigate("/stats")} variant="default" className="mt-4">Statistics</Button>
       </div>  
