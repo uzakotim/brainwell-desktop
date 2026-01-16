@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { BarChart, Brain } from "lucide-react";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -21,6 +22,7 @@ const Layout = ({ children }: LayoutProps) => {
     "/brain-region/Hippocampus": "Hippocampus",
     "/brain-region/Amygdala": "Amygdala",
     "/stats": "Statistics",
+    "/charts": "Analytics"
   }
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
@@ -57,6 +59,29 @@ const Layout = ({ children }: LayoutProps) => {
       {routeToTitle[currentRoute]}
     </div>
 
+    {/* Right: Button to go to Charts */}
+    <div className="absolute right-4 flex flex-row">
+      {!currentRoute.startsWith("/charts") &&
+      <Button
+        variant="ghost"
+        size="sm"
+        className="flex items-center text-muted-foreground hover:text-foreground transition-colors z-10"
+        onClick={() => navigate("/charts")}
+      >
+        <BarChart className="h-4 w-4" />
+      </Button>
+      }
+      {!currentRoute.startsWith("/brain-map") && 
+      <Button
+        variant="ghost"
+        size="sm"
+        className="flex items-center text-muted-foreground hover:text-foreground transition-colors z-10"
+        onClick={() => navigate("/brain-map")}
+      >
+        <Brain className="h-4 w-4" />
+      </Button>
+    }
+    </div>
   </div>
 </header>
       

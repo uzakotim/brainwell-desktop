@@ -63,7 +63,7 @@ export function Charts() {
         <div className="flex flex-col gap-10 items-center justify-center min-h-[calc(100vh-4rem)]">
       <Card className="w-[90vw] h-[calc(100vh-5rem)] flex flex-col overflow-hidden">
         <CardHeader className="flex flex-col gap-3">
-          <CardTitle>{region} Analytics</CardTitle>
+          {/* <CardTitle>{region} trend</CardTitle> */}
 
           {/* REGION SELECTOR */}
           <Select value={region} onValueChange={setRegion}>

@@ -40,7 +40,7 @@ function Stats() {
   }
   return (
     <Layout>
-       <div className="max-w-3xl mx-auto px-6 py-12 flex flex-col items-center">
+       <div className="max-w-3xl min-h-[calc(100vh-4rem)] mx-auto px-6 py-12 flex flex-col items-center justify-center">
           <div className="flex flex-col items-center justify-center space-y-8">
           {Object.entries(regionSums).map(([region, sum]) => (
             <div key={region} className="w-[calc(90vh)]">
