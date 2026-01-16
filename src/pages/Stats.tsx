@@ -59,6 +59,7 @@ function Stats() {
           ))}
           </div>
           <Button onClick={saveRecord} variant="default" className="mt-4">Save a record</Button>
+          <Button onClick={() => navigate("/charts")} variant="default" className="mt-4">View charts</Button>
           <p className="mt-4">{consoleMsg}</p>
       </div>
     </Layout>
