@@ -4,6 +4,9 @@ import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
 import "../App.css";
 import { questions } from "../data/Questions";
+import { PiBrainThin } from "react-icons/pi";
+
+
 import { 
   brainRegionQuestionsAtom, 
   brainRegionAnswersAtom, 
@@ -29,20 +32,59 @@ function BrainMap() {
     setAnswers(newAnswers);
   };
 
+  
   return ( 
     <Layout>
-      <div className="flex flex-col gap-10 items-center justify-center min-h-[calc(100vh-4rem)]">
-        <div className="flex flex-wrap gap-4 items-center justify-center">
-          {Object.keys(questions.brain_checkup).map((region) => (
-              <Button onClick={() => navigate(`/brain-region/${region}`)} key={region} variant="outline" className="text-lg p-6">
-                {region}
-              </Button>
-            ))}
+    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-4rem)]">
+      <div className="flex flex-row gap-20 justify-center items-center">
+        {/* Left buttons */}
+        <div className="flex flex-col gap-6">
+            <Button
+              key={"PFC"}
+              onClick={() => navigate(`/brain-region/${"PFC"}`)}
+              variant="outline"
+            >
+              {"PFC"}
+            </Button>
+            <Button
+              key={"Hippocampus"}
+              onClick={() => navigate(`/brain-region/${"Hippocampus"}`)}
+              variant="outline"
+            >
+              {"Hippocampus"}
+            </Button>
         </div>
-        <Brain className="w-[calc(30vh)] h-[calc(30vh)]"/>
-        <Button onClick={handleRandomize} variant="default" className="mt-4">Randomize questions</Button>
-        <Button onClick={() => navigate("/stats")} variant="default" className="mt-4">Statistics</Button>
-      </div>  
+
+        {/* Brain icon */}
+          <PiBrainThin className="w-[35vh] h-[35vh] mr-8 text-primary" />
+
+        {/* Right buttons */}
+        <div className="flex flex-col gap-6">
+            <Button
+              key={"Amygdala"}
+              onClick={() => navigate(`/brain-region/${"Amygdala"}`)}
+              variant="outline"
+            >
+              {"Amygdala"}
+            </Button>
+            <Button
+              key={"ACC"}
+              onClick={() => navigate(`/brain-region/${"ACC"}`)}
+              variant="outline"
+            >
+              {"ACC"}
+            </Button>
+        </div>
+      </div>
+
+  {/* Bottom buttons */}
+  <Button onClick={handleRandomize} variant="default" className="mt-8">
+    Randomize questions
+  </Button>
+  <Button onClick={() => navigate("/stats")} variant="default" className="mt-4">
+    Statistics
+  </Button>
+</div>
     </Layout>
   );
 }
