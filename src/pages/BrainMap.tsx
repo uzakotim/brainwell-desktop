@@ -12,7 +12,6 @@ import {
   brainRegionAnswersAtom, 
   getRandomQuestions 
 } from "../store/brainCheckupStore";
-import { Brain } from "lucide-react";
 
 function BrainMap() {
   const navigate = useNavigate();

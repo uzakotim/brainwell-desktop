@@ -13,7 +13,7 @@ function App() {
       <Route path="/brain-map" element={<BrainMap />} />
       <Route path="/brain-region/:region" element={<BrainRegion />} />
       <Route path="/stats" element={<Stats/>}/>
-      <Route path="/charts" element={<Charts region="PFC"/>}/>
+      <Route path="/charts" element={<Charts/>}/>
     </Routes>
   );
 }
