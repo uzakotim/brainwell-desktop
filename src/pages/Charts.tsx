@@ -51,7 +51,7 @@ export function Charts() {
 
   const availableRegions = React.useMemo(() => {
     if (store.records.length === 0) return []
-    return Object.keys(store.records[0].regionSums)
+    return Object.keys(store.records[store.records.length - 1].regionSums)
   }, [store])
 
   if (!region) {
@@ -78,6 +78,7 @@ export function Charts() {
               ))}
             </SelectContent>
           </Select>
+        
         </CardHeader>
 
        <CardContent className="flex-1 flex flex-col min-h-0 overflow-hidden">

@@ -52,6 +52,13 @@ function BrainMap() {
             >
               {"Hippocampus"}
             </Button>
+            <Button
+              key={"Cortisol"}
+              onClick={() => navigate(`/brain-region/${"Cortisol"}`)}
+              variant="outline"
+            >
+              {"Cortisol"}
+            </Button>
         </div>
 
         {/* Brain icon */}

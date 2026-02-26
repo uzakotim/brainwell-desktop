@@ -19,4 +19,5 @@ export const brainRegionAnswersAtom = atom<Record<string, number[]>>({
   Amygdala: [0, 0, 0, 0, 0],
   ACC: [0, 0, 0, 0, 0],
   Hippocampus: [0, 0, 0, 0, 0],
+  Cortisol: [0, 0, 0, 0, 0],
 });
