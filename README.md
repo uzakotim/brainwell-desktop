@@ -211,22 +211,6 @@ Uses [Vitest](https://vitest.dev) with [jsdom](https://github.com/jsdom/jsdom) a
 
 ---
 
-## 🗺️ Roadmap
-
-- [ ] Dark / light theme toggle
-- [ ] Guided session mode (step-by-step wizard)
-- [ ] Export data as CSV / PDF report
-- [ ] Trend insights & AI-powered summaries
-- [ ] Windows & Linux support
-
----
-
-## 📄 License
-
-This project is private and not yet licensed for redistribution.
-
----
-
 <p align="center">
   Built with ❤️ using
   <img src="public/tauri.svg" alt="Tauri" height="16" style="vertical-align:middle; margin: 0 4px;" />
