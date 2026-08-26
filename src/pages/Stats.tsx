@@ -40,27 +40,83 @@ function Stats() {
   }
   return (
     <Layout>
-      <div className="max-w-3xl min-h-[calc(100vh-4rem)] mx-auto px-6 py-6 flex flex-col items-center justify-center">
-        <div className="flex flex-col items-center justify-center space-y-8">
-          {Object.entries(regionSums).map(([region, sum]) => (
-            <div key={region} className="w-[calc(90vh)]">
-              <h2 className="mb-2 font-semibold capitalize">{region}</h2>
-              {(sum / 10) * 100 >= 66 ? (
-                <Progress value={(sum / 10) * 100} barColor="bg-red-400" />
-              ) :
-                (sum / 10) * 100 >= 33 ? (
-                  <Progress value={(sum / 10) * 100} barColor="bg-amber-400" />
-                )
-                  : (
-                    <Progress value={(sum / 10) * 100} barColor="bg-green-500" />
-                  )
-              }
-            </div>
-          ))}
+      <div className="h-[calc(100vh-4rem)] overflow-hidden px-4 py-4 md:px-8">
+        <div className="mx-auto flex h-full max-w-3xl flex-col">
+
+          {/* Header */}
+          <div className="shrink-0 text-center">
+            <h1 className="text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
+              Your statistics
+            </h1>
+
+            <p className="mx-auto mt-1 max-w-lg text-sm leading-relaxed text-muted-foreground">
+              See how your responses compare across different brain regions.
+            </p>
+          </div>
+
+          {/* Statistics */}
+          <div className="flex min-h-0 flex-1 flex-col justify-center gap-2.5 py-4">
+            {Object.entries(regionSums).map(([region, sum]) => {
+              const percentage = Math.min((sum / 10) * 100, 100);
+
+              const barColor =
+                percentage >= 66
+                  ? "bg-red-400"
+                  : percentage >= 33
+                    ? "bg-amber-400"
+                    : "bg-green-500";
+
+              return (
+                <div
+                  key={region}
+                  className="rounded-xl border border-border/60 bg-card/80 px-4 py-3 shadow-sm backdrop-blur-sm transition-shadow hover:shadow-md"
+                >
+                  <div className="mb-2 flex items-center justify-between">
+                    <h2 className="text-sm font-medium capitalize text-foreground">
+                      {region}
+                    </h2>
+
+                    <span className="text-sm font-semibold text-muted-foreground">
+                      {Math.round(percentage)}%
+                    </span>
+                  </div>
+
+                  <Progress
+                    value={percentage}
+                    barColor={barColor}
+                  />
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Actions */}
+          <div className="shrink-0 flex flex-col items-center justify-center gap-2 pb-1 sm:flex-row">
+            <Button
+              onClick={saveRecord}
+              className="h-10 w-full px-6 shadow-sm sm:w-auto"
+            >
+              Save a record
+            </Button>
+
+            <Button
+              onClick={() => navigate("/charts")}
+              variant="outline"
+              className="h-10 w-full px-6 sm:w-auto"
+            >
+              View charts
+            </Button>
+          </div>
+
+          {/* Status */}
+          <div className="h-5 shrink-0 text-center">
+            {consoleMsg && (
+              <p className="text-xs text-muted-foreground">
+                {consoleMsg}
+              </p>
+            )}
+          </div>
         </div>
-        <Button onClick={saveRecord} variant="default" className="mt-4">Save a record</Button>
-        <Button onClick={() => navigate("/charts")} variant="default" className="mt-4">View charts</Button>
-        <p className="mt-4">{consoleMsg}</p>
       </div>
     </Layout>
   );

@@ -7,10 +7,10 @@ import { questions } from "../data/Questions";
 import { PiBrainThin } from "react-icons/pi";
 
 
-import { 
-  brainRegionQuestionsAtom, 
-  brainRegionAnswersAtom, 
-  getRandomQuestions 
+import {
+  brainRegionQuestionsAtom,
+  brainRegionAnswersAtom,
+  getRandomQuestions
 } from "../store/brainCheckupStore";
 
 function BrainMap() {
@@ -31,66 +31,133 @@ function BrainMap() {
     setAnswers(newAnswers);
   };
 
-  
-  return ( 
+
+  return (
     <Layout>
-    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-4rem)]">
-      <div className="flex flex-row gap-20 justify-center items-center">
-        {/* Left buttons */}
-        <div className="flex flex-col gap-6">
-            <Button
-              key={"PFC"}
-              onClick={() => navigate(`/brain-region/${"PFC"}`)}
-              variant="outline"
-            >
-              {"PFC"}
-            </Button>
-            <Button
-              key={"Hippocampus"}
-              onClick={() => navigate(`/brain-region/${"Hippocampus"}`)}
-              variant="outline"
-            >
-              {"Hippocampus"}
-            </Button>
-            <Button
-              key={"Cortisol"}
-              onClick={() => navigate(`/brain-region/${"Cortisol"}`)}
-              variant="outline"
-            >
-              {"Cortisol"}
-            </Button>
-        </div>
+      <div className="h-[calc(100vh-4rem)] overflow-hidden px-4 py-4 md:px-8">
+        <div className="mx-auto flex h-full max-w-5xl flex-col">
 
-        {/* Brain icon */}
-          <PiBrainThin className="w-[35vh] h-[35vh] mr-8 text-primary" />
+          {/* Header */}
+          <div className="shrink-0 text-center">
+            <h1 className="text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
+              Explore your brain
+            </h1>
 
-        {/* Right buttons */}
-        <div className="flex flex-col gap-6">
+            <p className="mx-auto mt-1 max-w-lg text-sm leading-relaxed text-muted-foreground">
+              Select a brain region to explore the questions and insights associated
+              with it.
+            </p>
+          </div>
+
+          {/* Brain map */}
+          <div className="flex min-h-0 flex-1 items-center justify-center">
+            <div className="grid w-full max-w-4xl grid-cols-1 items-center gap-4 md:grid-cols-[1fr_auto_1fr] md:gap-8">
+
+              {/* Left regions */}
+              <div className="flex flex-col gap-2 md:gap-3">
+                {[
+                  {
+                    name: "PFC",
+                    description: "Decision making",
+                  },
+                  {
+                    name: "Hippocampus",
+                    description: "Memory & learning",
+                  },
+                  {
+                    name: "Cortisol",
+                    description: "Stress response",
+                  },
+                ].map((region) => (
+                  <button
+                    key={region.name}
+                    onClick={() => navigate(`/brain-region/${region.name}`)}
+                    className="group flex items-center justify-between rounded-xl border border-border/60 bg-card/80 px-4 py-2.5 text-left shadow-sm backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-card hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary/30 md:px-4 md:py-3"
+                  >
+                    <div>
+                      <div className="text-sm font-medium text-foreground">
+                        {region.name}
+                      </div>
+                      <div className="mt-0.5 text-xs text-muted-foreground">
+                        {region.description}
+                      </div>
+                    </div>
+
+                    <span className="ml-4 text-muted-foreground transition-transform duration-200 group-hover:translate-x-1 group-hover:text-primary">
+                      →
+                    </span>
+                  </button>
+                ))}
+              </div>
+
+              {/* Brain */}
+              <div className="flex items-center justify-center py-2 md:py-0">
+                <div className="relative flex size-[min(42vw,40vh)] max-h-72 max-w-72 items-center justify-center rounded-full border border-border/40 bg-card/40 shadow-inner backdrop-blur-sm">
+
+                  <div className="absolute inset-[8%] rounded-full border border-primary/10" />
+                  <div className="absolute inset-[16%] rounded-full border border-primary/5" />
+
+                  <PiBrainThin
+                    className="size-[65%] text-primary transition-transform duration-500 hover:scale-105"
+                    strokeWidth={1}
+                  />
+                </div>
+              </div>
+
+              {/* Right regions */}
+              <div className="flex flex-col gap-2 md:gap-3">
+                {[
+                  {
+                    name: "Amygdala",
+                    description: "Emotion & fear",
+                  },
+                  {
+                    name: "ACC",
+                    description: "Attention & control",
+                  },
+                ].map((region) => (
+                  <button
+                    key={region.name}
+                    onClick={() => navigate(`/brain-region/${region.name}`)}
+                    className="group flex items-center justify-between rounded-xl border border-border/60 bg-card/80 px-4 py-2.5 text-left shadow-sm backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-card hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary/30 md:px-4 md:py-3"
+                  >
+                    <div>
+                      <div className="text-sm font-medium text-foreground">
+                        {region.name}
+                      </div>
+                      <div className="mt-0.5 text-xs text-muted-foreground">
+                        {region.description}
+                      </div>
+                    </div>
+
+                    <span className="ml-4 text-muted-foreground transition-transform duration-200 group-hover:translate-x-1 group-hover:text-primary">
+                      →
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div className="mb-4 shrink-0 flex flex-col items-center justify-center gap-2 pb-1 sm:flex-row">
             <Button
-              key={"Amygdala"}
-              onClick={() => navigate(`/brain-region/${"Amygdala"}`)}
-              variant="outline"
+              onClick={handleRandomize}
+              className="h-10 w-full px-6 shadow-sm sm:w-auto"
             >
-              {"Amygdala"}
+              Randomize questions
             </Button>
+
             <Button
-              key={"ACC"}
-              onClick={() => navigate(`/brain-region/${"ACC"}`)}
+              onClick={() => navigate("/stats")}
               variant="outline"
+              className="h-10 w-full px-6 sm:w-auto"
             >
-              {"ACC"}
+              View statistics
             </Button>
+          </div>
         </div>
       </div>
-
-  {/* Bottom buttons */}
-  <Button onClick={handleRandomize} variant="default" className="mt-8">
-    Randomize questions
-  </Button>
-  <Button onClick={() => navigate("/stats")} variant="default" className="mt-4">
-    Statistics
-  </Button>
-</div>
     </Layout>
   );
 }
