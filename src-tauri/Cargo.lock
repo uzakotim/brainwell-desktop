@@ -3,6 +3,19 @@
 version = 4
 
 [[package]]
+name = "Brainwell"
+version = "1.0.0"
+dependencies = [
+ "dotenv",
+ "fix-path-env",
+ "serde",
+ "serde_json",
+ "tauri",
+ "tauri-build",
+ "tauri-plugin-opener",
+]
+
+[[package]]
 name = "adler2"
 version = "2.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -269,19 +282,6 @@ dependencies = [
  "futures-io",
  "futures-lite",
  "piper",
-]
-
-[[package]]
-name = "brainwell-desktop"
-version = "0.1.0"
-dependencies = [
- "dotenv",
- "fix-path-env",
- "serde",
- "serde_json",
- "tauri",
- "tauri-build",
- "tauri-plugin-opener",
 ]
 
 [[package]]
