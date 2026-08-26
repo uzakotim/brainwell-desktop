@@ -14,7 +14,7 @@ function Stats() {
   const [consoleMsg, setConsoleMsg] = useState("");
   const [brainRegionAnswers] = useAtom(brainRegionAnswersAtom);
 
- const regionSums: Record<string, number> = {};
+  const regionSums: Record<string, number> = {};
 
   Object.entries(brainRegionAnswers).forEach(([region, answers]) => {
     regionSums[region] = answers.reduce(
@@ -32,7 +32,7 @@ function Stats() {
       regionSums,
     };
     setConsoleMsg("Saving...");
-    await invoke("insert_record_to_store",{recordJson: JSON.stringify(record)});
+    await invoke("insert_record_to_store", { recordJson: JSON.stringify(record) });
     setConsoleMsg("Record saved!");
     setTimeout(() => {
       setConsoleMsg("");
@@ -40,27 +40,27 @@ function Stats() {
   }
   return (
     <Layout>
-       <div className="max-w-3xl min-h-[calc(100vh-4rem)] mx-auto px-6 py-12 flex flex-col items-center justify-center">
-          <div className="flex flex-col items-center justify-center space-y-8">
+      <div className="max-w-3xl min-h-[calc(100vh-4rem)] mx-auto px-6 py-6 flex flex-col items-center justify-center">
+        <div className="flex flex-col items-center justify-center space-y-8">
           {Object.entries(regionSums).map(([region, sum]) => (
             <div key={region} className="w-[calc(90vh)]">
               <h2 className="mb-2 font-semibold capitalize">{region}</h2>
-              { (sum/10) * 100 >= 66 ? (
-                 <Progress value={(sum / 10) * 100} barColor="bg-red-400" />
+              {(sum / 10) * 100 >= 66 ? (
+                <Progress value={(sum / 10) * 100} barColor="bg-red-400" />
               ) :
-               (sum/10) * 100 >= 33 ? (
-                 <Progress value={(sum / 10) * 100} barColor="bg-amber-400" />
-               )
-               : (
-                 <Progress value={(sum / 10) * 100} barColor="bg-green-500" />
-               )
+                (sum / 10) * 100 >= 33 ? (
+                  <Progress value={(sum / 10) * 100} barColor="bg-amber-400" />
+                )
+                  : (
+                    <Progress value={(sum / 10) * 100} barColor="bg-green-500" />
+                  )
               }
             </div>
           ))}
-          </div>
-          <Button onClick={saveRecord} variant="default" className="mt-4">Save a record</Button>
-          <Button onClick={() => navigate("/charts")} variant="default" className="mt-4">View charts</Button>
-          <p className="mt-4">{consoleMsg}</p>
+        </div>
+        <Button onClick={saveRecord} variant="default" className="mt-4">Save a record</Button>
+        <Button onClick={() => navigate("/charts")} variant="default" className="mt-4">View charts</Button>
+        <p className="mt-4">{consoleMsg}</p>
       </div>
     </Layout>
   );
