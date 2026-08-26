@@ -1,22 +1,26 @@
 import { useNavigate } from "react-router-dom";
-import { useSetAtom } from 'jotai';
+import { useAtom, useSetAtom } from "jotai";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
 import "../App.css";
 import { questions } from "../data/Questions";
 import { PiBrainThin } from "react-icons/pi";
-
+import { invoke } from "@tauri-apps/api/core";
+import { useState } from "react";
 
 import {
   brainRegionQuestionsAtom,
   brainRegionAnswersAtom,
-  getRandomQuestions
+  getRandomQuestions,
 } from "../store/brainCheckupStore";
 
 function BrainMap() {
   const navigate = useNavigate();
+
   const setQuestions = useSetAtom(brainRegionQuestionsAtom);
   const setAnswers = useSetAtom(brainRegionAnswersAtom);
+
+  const [brainRegionAnswers] = useAtom(brainRegionAnswersAtom);
 
   const handleRandomize = () => {
     const newQuestions: Record<string, string[]> = {};
@@ -31,6 +35,106 @@ function BrainMap() {
     setAnswers(newAnswers);
   };
 
+  const regionSums: Record<string, number> = {};
+
+  Object.entries(brainRegionAnswers).forEach(([region, answers]) => {
+    regionSums[region] = answers.reduce(
+      (sum: number, answer: number) => sum + answer,
+      0
+    );
+  });
+
+  const getPercentage = (region: string) => {
+    const sum = regionSums[region] ?? 0;
+    return Math.min((sum / 10) * 100, 100);
+  };
+
+  const getScoreColor = (percentage: number) => {
+    if (percentage >= 66) return "text-red-400";
+    if (percentage >= 33) return "text-amber-400";
+    return "text-green-500";
+  };
+
+  const getRingColor = (percentage: number) => {
+    if (percentage >= 66) return "stroke-red-400";
+    if (percentage >= 33) return "stroke-amber-400";
+    return "stroke-green-500";
+  };
+  const getHoverColor = (percentage: number) => {
+    if (percentage >= 66) {
+      return {
+        border: "border-red-400/70",
+        bg: "bg-red-400/5",
+        text: "text-red-500 dark:text-red-400",
+        ring: "ring-red-400/20",
+      };
+    }
+
+    if (percentage >= 33) {
+      return {
+        border: "border-amber-400/70",
+        bg: "bg-amber-400/5",
+        text: "text-amber-500 dark:text-amber-400",
+        ring: "ring-amber-400/20",
+      };
+    }
+
+    return {
+      border: "border-green-500/70",
+      bg: "bg-green-500/5",
+      text: "text-green-600 dark:text-green-400",
+      ring: "ring-green-500/20",
+    };
+  };
+
+  const saveRecord = async () => {
+    const record = {
+      date: new Date().toLocaleDateString("en-FR", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      }),
+      dayTime: new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+      regionSums,
+    };
+
+    await invoke("insert_record_to_store", {
+      recordJson: JSON.stringify(record),
+    });
+  };
+
+  const regions = [
+    {
+      name: "PFC",
+      description: "Decision making",
+      side: "left",
+    },
+    {
+      name: "Hippocampus",
+      description: "Memory & learning",
+      side: "left",
+    },
+    {
+      name: "Cortisol",
+      description: "Stress response",
+      side: "left",
+    },
+    {
+      name: "Amygdala",
+      description: "Emotion & fear",
+      side: "right",
+    },
+    {
+      name: "ACC",
+      description: "Attention & control",
+      side: "right",
+    },
+  ];
+
+  const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
 
   return (
     <Layout>
@@ -44,103 +148,138 @@ function BrainMap() {
             </h1>
 
             <p className="mx-auto mt-1 max-w-lg text-sm leading-relaxed text-muted-foreground">
-              Select a brain region to explore the questions and insights associated
-              with it.
+              Select a brain region to explore your questions and see your
+              current responses.
             </p>
           </div>
 
           {/* Brain map */}
           <div className="flex min-h-0 flex-1 items-center justify-center">
-            <div className="grid w-full max-w-4xl grid-cols-1 items-center gap-4 md:grid-cols-[1fr_auto_1fr] md:gap-8">
+            <div className="grid w-full max-w-5xl grid-cols-1 items-center gap-6 md:grid-cols-[1fr_auto_1fr] md:gap-10">
 
               {/* Left regions */}
-              <div className="flex flex-col gap-2 md:gap-3">
-                {[
-                  {
-                    name: "PFC",
-                    description: "Decision making",
-                  },
-                  {
-                    name: "Hippocampus",
-                    description: "Memory & learning",
-                  },
-                  {
-                    name: "Cortisol",
-                    description: "Stress response",
-                  },
-                ].map((region) => (
-                  <button
-                    key={region.name}
-                    onClick={() => navigate(`/brain-region/${region.name}`)}
-                    className="group flex items-center justify-between rounded-xl border border-border/60 bg-card/80 px-4 py-2.5 text-left shadow-sm backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-card hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary/30 md:px-4 md:py-3"
-                  >
-                    <div>
-                      <div className="text-sm font-medium text-foreground">
-                        {region.name}
-                      </div>
-                      <div className="mt-0.5 text-xs text-muted-foreground">
-                        {region.description}
-                      </div>
-                    </div>
+              <div className="flex flex-col gap-3">
+                {regions
+                  .filter((region) => region.side === "left")
+                  .map((region) => {
+                    const percentage = getPercentage(region.name);
 
-                    <span className="ml-4 text-muted-foreground transition-transform duration-200 group-hover:translate-x-1 group-hover:text-primary">
-                      →
-                    </span>
-                  </button>
-                ))}
+                    return (
+                      <RegionButton
+                        key={region.name}
+                        region={region}
+                        percentage={percentage}
+                        scoreColor={getScoreColor(percentage)}
+                        hoverColor={getHoverColor(percentage)}
+                        isHovered={hoveredRegion === region.name}
+                        onClick={() =>
+                          navigate(`/brain-region/${region.name}`)
+                        }
+                      />
+                    );
+                  })}
               </div>
 
-              {/* Brain */}
-              <div className="flex items-center justify-center py-2 md:py-0">
-                <div className="relative flex size-[min(42vw,40vh)] max-h-72 max-w-72 items-center justify-center rounded-full border border-border/40 bg-card/40 shadow-inner backdrop-blur-sm">
+              {/* Brain + statistics rings */}
+              <div className="flex items-center justify-center py-4 md:py-0">
+                <div className="relative flex size-[min(52vw,45vh)] max-h-80 max-w-80 items-center justify-center">
 
-                  <div className="absolute inset-[8%] rounded-full border border-primary/10" />
-                  <div className="absolute inset-[16%] rounded-full border border-primary/5" />
+                  {/* Statistics rings */}
+                  {[
+                    "PFC",
+                    "Hippocampus",
+                    "Cortisol",
+                    "Amygdala",
+                    "ACC",
+                  ].map((region, index) => {
+                    const percentage = getPercentage(region);
 
-                  <PiBrainThin
-                    className="size-[65%] text-primary transition-transform duration-500 hover:scale-105"
-                    strokeWidth={1}
-                  />
+                    const inset = index * 7;
+                    const size = 100 - inset * 2;
+
+                    const isHovered = hoveredRegion === region;
+
+                    return (
+                      <svg
+                        key={region}
+                        className="absolute cursor-pointer transition-all duration-200"
+                        style={{
+                          inset: `${inset}%`,
+                          width: `${size}%`,
+                          height: `${size}%`,
+                          transform: "rotate(-90deg)",
+                        }}
+                        viewBox="0 0 100 100"
+                        onMouseEnter={() => setHoveredRegion(region)}
+                        onMouseLeave={() => setHoveredRegion(null)}
+                      >
+                        {/* Background ring */}
+                        <circle
+                          cx="50"
+                          cy="50"
+                          r="47"
+                          fill="none"
+                          className="stroke-border/30"
+                          strokeWidth={isHovered ? "1.8" : "1"}
+                        />
+
+                        {/* Progress ring */}
+                        <circle
+                          cx="50"
+                          cy="50"
+                          r="47"
+                          fill="none"
+                          className={getRingColor(percentage)}
+                          strokeWidth={isHovered ? "3" : "1.8"}
+                          strokeDasharray={`${percentage * 2.95} 295`}
+                          strokeLinecap="round"
+                          style={{
+                            transition:
+                              "stroke-dasharray 500ms ease, stroke-width 200ms ease",
+                          }}
+                        />
+                      </svg>
+                    );
+                  })}
+
+                  {/* Brain */}
+                  <div className="relative flex size-[35%] items-center justify-center rounded-full bg-card shadow-inner">
+                    <PiBrainThin
+                      className="size-[70%] text-primary transition-transform duration-500 hover:scale-105"
+                      strokeWidth={1}
+                    />
+                  </div>
                 </div>
               </div>
 
               {/* Right regions */}
-              <div className="flex flex-col gap-2 md:gap-3">
-                {[
-                  {
-                    name: "Amygdala",
-                    description: "Emotion & fear",
-                  },
-                  {
-                    name: "ACC",
-                    description: "Attention & control",
-                  },
-                ].map((region) => (
-                  <button
-                    key={region.name}
-                    onClick={() => navigate(`/brain-region/${region.name}`)}
-                    className="group flex items-center justify-between rounded-xl border border-border/60 bg-card/80 px-4 py-2.5 text-left shadow-sm backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-card hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary/30 md:px-4 md:py-3"
-                  >
-                    <div>
-                      <div className="text-sm font-medium text-foreground">
-                        {region.name}
-                      </div>
-                      <div className="mt-0.5 text-xs text-muted-foreground">
-                        {region.description}
-                      </div>
-                    </div>
+              <div className="flex flex-col gap-3">
+                {regions
+                  .filter((region) => region.side === "right")
+                  .map((region) => {
+                    const percentage = getPercentage(region.name);
 
-                    <span className="ml-4 text-muted-foreground transition-transform duration-200 group-hover:translate-x-1 group-hover:text-primary">
-                      →
-                    </span>
-                  </button>
-                ))}
+                    return (
+                      <RegionButton
+                        key={region.name}
+                        region={region}
+                        percentage={percentage}
+                        scoreColor={getScoreColor(percentage)}
+                        hoverColor={getHoverColor(percentage)}
+                        isHovered={hoveredRegion === region.name}
+                        onClick={() =>
+                          navigate(`/brain-region/${region.name}`)
+                        }
+                      />
+                    );
+                  })}
               </div>
+
             </div>
           </div>
 
           {/* Actions */}
-          <div className="mb-4 shrink-0 flex flex-col items-center justify-center gap-2 pb-1 sm:flex-row">
+          <div className="mb-4 shrink-0 flex flex-col items-center justify-center gap-2 sm:flex-row">
             <Button
               onClick={handleRandomize}
               className="h-10 w-full px-6 shadow-sm sm:w-auto"
@@ -149,11 +288,11 @@ function BrainMap() {
             </Button>
 
             <Button
-              onClick={() => navigate("/stats")}
+              onClick={saveRecord}
               variant="outline"
               className="h-10 w-full px-6 sm:w-auto"
             >
-              View statistics
+              Save a record
             </Button>
           </div>
         </div>
@@ -162,4 +301,84 @@ function BrainMap() {
   );
 }
 
+
+/* Region button */
+function RegionButton({
+  region,
+  percentage,
+  scoreColor,
+  hoverColor,
+  isHovered,
+  onClick,
+}: {
+  region: {
+    name: string;
+    description: string;
+  };
+  percentage: number;
+  scoreColor: string;
+  hoverColor: {
+    border: string;
+    bg: string;
+    text: string;
+    ring: string;
+  };
+  isHovered: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`
+        group flex items-center justify-between rounded-xl
+        border px-4 py-2.5 text-left
+        shadow-sm backdrop-blur-sm
+        transition-all duration-200
+        focus:outline-none focus:ring-2 focus:ring-primary/30
+        md:px-4 md:py-3
+
+        ${isHovered
+          ? `${hoverColor.border} ${hoverColor.bg} shadow-md ring-1 ${hoverColor.ring}`
+          : "border-border/60 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-card hover:shadow-md"
+        }
+      `}
+    >
+      <div>
+        <div
+          className={`
+            text-sm font-medium transition-colors duration-200
+            ${isHovered
+              ? hoverColor.text
+              : "text-foreground"
+            }
+          `}
+        >
+          {region.name}
+        </div>
+
+        <div className="mt-0.5 text-xs text-muted-foreground">
+          {region.description}
+        </div>
+      </div>
+
+      <div className="ml-4 flex items-center gap-3">
+        <span className={`text-xs font-semibold ${scoreColor}`}>
+          {Math.round(percentage)}%
+        </span>
+
+        <span
+          className={`
+            text-muted-foreground
+            transition-all duration-200
+            group-hover:translate-x-1
+            group-hover:text-primary
+            ${isHovered ? `translate-x-1 ${hoverColor.text}` : ""}
+          `}
+        >
+          →
+        </span>
+      </div>
+    </button>
+  );
+}
 export default BrainMap;
