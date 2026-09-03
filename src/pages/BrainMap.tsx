@@ -6,13 +6,19 @@ import "../App.css";
 import { questions } from "../data/Questions";
 import { PiBrainThin } from "react-icons/pi";
 import { invoke } from "@tauri-apps/api/core";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import {
   brainRegionQuestionsAtom,
   brainRegionAnswersAtom,
   getRandomQuestions,
 } from "../store/brainCheckupStore";
+
+type StoreRecord = {
+  date: string;
+  dayTime: string;
+  regionSums: Record<string, number>;
+};
 
 function BrainMap() {
   const navigate = useNavigate();
@@ -21,6 +27,31 @@ function BrainMap() {
   const setAnswers = useSetAtom(brainRegionAnswersAtom);
 
   const [brainRegionAnswers] = useAtom(brainRegionAnswersAtom);
+
+  // Today's saved regionSums (null = not yet loaded or none saved today)
+  const [todayRecord, setTodayRecord] = useState<StoreRecord | null>(null);
+
+  useEffect(() => {
+    const loadTodayRecord = async () => {
+      try {
+        const storeJson: string = await invoke("load_store");
+        const store: { records: StoreRecord[] } = JSON.parse(storeJson);
+        const todayDate = new Date().toLocaleDateString("en-FR", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        });
+        // Find the most recent record for today
+        const todayRecords = store.records.filter((r) => r.date === todayDate);
+        if (todayRecords.length > 0) {
+          setTodayRecord(todayRecords[todayRecords.length - 1]);
+        }
+      } catch (e) {
+        console.error("Failed to load store:", e);
+      }
+    };
+    loadTodayRecord();
+  }, []);
 
   const handleRandomize = () => {
     const newQuestions: Record<string, string[]> = {};
@@ -35,14 +66,15 @@ function BrainMap() {
     setAnswers(newAnswers);
   };
 
-  const regionSums: Record<string, number> = {};
-
-  Object.entries(brainRegionAnswers).forEach(([region, answers]) => {
-    regionSums[region] = answers.reduce(
-      (sum: number, answer: number) => sum + answer,
-      0
-    );
-  });
+  // Use today's saved record when available, otherwise fall back to live answers
+  const regionSums: Record<string, number> = todayRecord
+    ? todayRecord.regionSums
+    : Object.fromEntries(
+        Object.entries(brainRegionAnswers).map(([region, answers]) => [
+          region,
+          answers.reduce((sum: number, answer: number) => sum + answer, 0),
+        ])
+      );
 
   const getPercentage = (region: string) => {
     const sum = regionSums[region] ?? 0;

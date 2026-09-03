@@ -1,6 +1,6 @@
 [package]
 name = "Brainwell"
-version = "1.0.0"
+version = "1.0.1"
 description = "Private, offline-first desktop app for tracking your brain health over time."
 authors = ["Timur Uzakov"]
 edition = "2021"
